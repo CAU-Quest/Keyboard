@@ -17,10 +17,10 @@ public class ButtonVR : MonoBehaviour
     private Vector3 initialColliderCenter;
 
     private GameObject _renderer;
-    private GameObject presser;
+    public GameObject presser;
     private BoxCollider collider;
     private AudioSource sound;
-    private bool isPressed;
+    public bool isPressed;
     private bool isCapital = false;
     private bool isCooldown = false;
 
@@ -30,7 +30,7 @@ public class ButtonVR : MonoBehaviour
     void Start()
     {
         _renderer = GetComponentInChildren<MeshRenderer>().gameObject;
-        collider = GetComponent<BoxCollider>();
+        collider = GetComponentInChildren<BoxCollider>();
         initialLocalPosition = _renderer.transform.localPosition;
         initialColliderCenter = collider.center;
         sound = GetComponent<AudioSource>();
@@ -40,23 +40,6 @@ public class ButtonVR : MonoBehaviour
     public void SetCapital(bool state)
     {
         isCapital = state;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Finger") && !isPressed)
-        {
-            presser = other.gameObject;
-            isPressed = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject == presser)
-        {
-            ResetButton();
-        }
     }
 
     void Update()
@@ -72,7 +55,6 @@ public class ButtonVR : MonoBehaviour
             {
                 onPress.Invoke((isCapital) ? capitalText : text);
                 sound.Play();
-                StartCoroutine(KeyCooldown());
                 isCooldown = true;
             }
         }
@@ -83,16 +65,12 @@ public class ButtonVR : MonoBehaviour
 
     }
 
-    IEnumerator KeyCooldown()
-    {
-        yield return new WaitForSeconds(0.2f);
-        isCooldown = false;
-    }
 
-    private void ResetButton()
+    public void ResetButton()
     {
         _renderer.transform.localPosition = initialLocalPosition;
         onRelease.Invoke();
         isPressed = false;
+        isCooldown = false;
     }
 }
