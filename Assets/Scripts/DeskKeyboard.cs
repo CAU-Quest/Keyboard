@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DeskKeyboard : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class DeskKeyboard : MonoBehaviour
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private List<ButtonVR> buttons = new List<ButtonVR>();
 
+    [SerializeField] private UnityEvent<string> onInsertChar;
+    
     private bool isCapital;
 
 
@@ -20,6 +23,7 @@ public class DeskKeyboard : MonoBehaviour
     public void InsertChar(string character)
     {
         inputField.text += character;
+        onInsertChar?.Invoke(character);
     }
 
     public void Backspace()
