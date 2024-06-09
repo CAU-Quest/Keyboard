@@ -32,7 +32,7 @@ public class Trigger : MonoBehaviour
 
     private IEnumerator CoolDown()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         isCoolDown = false;
     }
 }
